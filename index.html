@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>My Products</title>
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #FFC000;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
+    .header {
+      padding: 1rem;
+      background: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      width: 100%;
+    }
+    .container {
+      padding: 1rem;
+      width: 100%;
+    }
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .product-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .product-header button {
+      margin-top: 0.5rem;
+      background: #FFD400;
+      padding: 0.5rem 1rem;
+      border: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .search-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 14px;
+      min-width: 150px;
+    }
+    .search-bar button {
+      background: black;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      font-size: 0.8rem;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #f2f2f2;
+      font-weight: bold;
+    }
+    @media screen and (max-width: 600px) {
+      .product-header, .search-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      table thead {
+        display: none;
+      }
+      table, tbody, tr, td {
+        display: block;
+        width: 100%;
+      }
+      tr {
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #fff;
+        padding: 0.5rem;
+      }
+      td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0.75rem;
+        width: 45%;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Welcome, Oka Hanuraga</div>
+
+  <div class="container">
+    <div class="product-header">
+      <h2>Work In Progress (7)</h2>
+      <button>REGISTER PRODUCT</button>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search for item, serial or door nr…">
+      <button>→</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>WO No</th>
+          <th>Component</th>
+          <th>Model</th>
+          <th>Part Name</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="WO No">WO-20250701-001</td>
+          <td data-label="Component">Tube Blade Lift Cylinder</td>
+          <td data-label="Model">777D</td>
+          <td data-label="Part Name">PISTON</td>
+          <td data-label="Status">WIP</td>
+        </tr>
+        <tr>
+          <td data-label="WO No">WO-20250701-002</td>
+          <td data-label="Component">Tube Blade Lift Cylinder</td>
+          <td data-label="Model">777D</td>
+          <td data-label="Part Name">BARREL</td>
+          <td data-label="Status">Finished</td>
+        </tr>
+        <tr>
+          <td data-label="WO No">WO-20250701-003</td>
+          <td data-label="Component">Tube Blade Lift Cylinder</td>
+          <td data-label="Model">777D</td>
+          <td data-label="Part Name">ROD</td>
+          <td data-label="Status">Cancel</td>
+        </tr>
+        <tr>
+          <td data-label="WO No">WO-20250701-004</td>
+          <td data-label="Component">Lift Arm Assembly</td>
+          <td data-label="Model">980H</td>
+          <td data-label="Part Name">SEAL KIT</td>
+          <td data-label="Status">WIP</td>
+        </tr>
+        <tr>
+          <td data-label="WO No">WO-20250701-005</td>
+          <td data-label="Component">Track Adjuster</td>
+          <td data-label="Model">D6R</td>
+          <td data-label="Part Name">SPRING</td>
+          <td data-label="Status">Finished</td>
+        </tr>
+        <tr>
+          <td data-label="WO No">WO-20250701-006</td>
+          <td data-label="Component">Hydraulic Tank</td>
+          <td data-label="Model">PC200</td>
+          <td data-label="Part Name">FLANGE</td>
+          <td data-label="Status">Cancel</td>
+        </tr>
+        <tr>
+          <td data-label="WO No">WO-20250701-007</td>
+          <td data-label="Component">Radiator Core</td>
+          <td data-label="Model">HD465</td>
+          <td data-label="Part Name">CORE PANEL</td>
+          <td data-label="Status">WIP</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
