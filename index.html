@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Products</title>
   <style>
     html, body {
-      height: 100%;
-      width: 100%;
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
       background: #FFC000;
-      overflow: hidden; /* ini diperbaiki dari overflow-x: hidden */
       box-sizing: border-box;
     }
     *, *::before, *::after {
@@ -197,5 +194,8 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Spacer div to avoid white space issue in iframe -->
+  <div style="min-height: 20px;"></div>
 </body>
 </html>
