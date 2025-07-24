@@ -132,31 +132,31 @@
                 tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No work orders found.</td></tr>';
                 return;
             }
-            data.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${order["WO NO"] || ''}</td>
-                    <td>${order["CUSTOMER"] || ''}</td>
-                    <td>${order["DESCRIPTION"] || ''}</td>
-                    <td>${order["MODEL"] || ''}</td>
-                    <td>${order["PART NAME"] || ''}</td>
-                    <td>${order["STATUS"] || ''}</td>
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td>${row[5]}</td>
+                    <td>${row[13]}</td>
+                    <td>${row[7]}</td>
                 `;
-                tableBody.appendChild(row);
+                tableBody.appendChild(tr);
             });
-            const wipCount = data.filter(order => order["STATUS"]?.toUpperCase() === 'WIP').length;
+            const wipCount = data.filter(row => row[7]?.toUpperCase() === 'WIP').length;
             document.getElementById('wipCount').textContent = `Work In Progress (${wipCount})`;
         }
 
         function filterWorkOrders() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allWorkOrders.filter(order => {
+            const filtered = allWorkOrders.filter(row => {
                 return (
-                    order["WO NO"]?.toLowerCase().includes(searchTerm) ||
-                    order["CUSTOMER"]?.toLowerCase().includes(searchTerm) ||
-                    order["DESCRIPTION"]?.toLowerCase().includes(searchTerm) ||
-                    order["MODEL"]?.toLowerCase().includes(searchTerm) ||
-                    order["PART NAME"]?.toLowerCase().includes(searchTerm)
+                    row[0]?.toLowerCase().includes(searchTerm) ||
+                    row[1]?.toLowerCase().includes(searchTerm) ||
+                    row[2]?.toLowerCase().includes(searchTerm) ||
+                    row[5]?.toLowerCase().includes(searchTerm) ||
+                    row[13]?.toLowerCase().includes(searchTerm)
                 );
             });
             renderWorkOrders(filtered);
@@ -168,18 +168,12 @@
 
             Papa.parse(csvUrl, {
                 download: true,
-                header: true,
+                header: false,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    allWorkOrders = results.data.map(row => {
-                        const cleaned = {};
-                        for (let key in row) {
-                            const newKey = key.trim().toUpperCase();
-                            cleaned[newKey] = row[key]?.trim?.();
-                        }
-                        return cleaned;
-                    });
-                    console.log("Loaded Work Orders:", allWorkOrders);
+                    const rows = results.data;
+                    rows.shift(); // remove header
+                    allWorkOrders = rows;
                     renderWorkOrders(allWorkOrders);
                 },
                 error: function(err) {
