@@ -1,1 +1,61 @@
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script> <script> const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzbgpgmqzLT0h1Ud72g8LDDCCQxtS_nCm6Uq5wq_O2HQlb6GXGQrVJhEvNP3KuXel_knuIdjILgEda/pub?output=csv"; let allWorkOrders = []; function renderWorkOrders(data) { const tableBody = document.getElementById('workOrderTableBody'); tableBody.innerHTML = ''; if (data.length === 0) { tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No work orders found.</td></tr>'; return; } data.forEach(order => { const row = document.createElement('tr'); row.innerHTML = ` <td>${order["WO NO"] || ''}</td> <td>${order["CUSTOMER"] || ''}</td> <td>${order["DESCRIPTION"] || ''}</td> <td>${order["MODEL"] || ''}</td> <td>${order["PART NAME"] || ''}</td> <td>${order["STATUS"] || ''}</td> `; tableBody.appendChild(row); }); const wipCount = data.filter(order => order.STATUS?.toUpperCase() === 'WIP').length; document.getElementById('wipCount').textContent = `Work In Progress (${wipCount})`; } function filterWorkOrders() { const searchTerm = document.getElementById('searchInput').value.toLowerCase(); const filtered = allWorkOrders.filter(order => { return ( order["WO NO"]?.toLowerCase().includes(searchTerm) || order["CUSTOMER"]?.toLowerCase().includes(searchTerm) || order["DESCRIPTION"]?.toLowerCase().includes(searchTerm) || order["MODEL"]?.toLowerCase().includes(searchTerm) || order["PART NAME"]?.toLowerCase().includes(searchTerm) ); }); renderWorkOrders(filtered); } document.addEventListener('DOMContentLoaded', () => { document.getElementById('searchButton').addEventListener('click', filterWorkOrders); document.getElementById('searchInput').addEventListener('keyup', filterWorkOrders); Papa.parse(csvUrl, { download: true, header: true, skipEmptyLines: true, complete: function(results) { allWorkOrders = results.data; renderWorkOrders(allWorkOrders); }, error: function(err) { console.error("Error parsing CSV:", err); } }); }); </script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script>
+const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzbgpgmqzLT0h1Ud72g8LDDCCQxtS_nCm6Uq5wq_O2HQlb6GXGQrVJhEvNP3KuXel_knuIdjILgEda/pub?output=csv";
+
+let allWorkOrders = [];
+
+function renderWorkOrders(data) {
+    const tableBody = document.getElementById('workOrderTableBody');
+    tableBody.innerHTML = '';
+    if (data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No work orders found.</td></tr>';
+        return;
+    }
+    data.forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${order["WO NO"] || ''}</td>
+            <td>${order["CUSTOMER"] || ''}</td>
+            <td>${order["DESCRIPTION"] || ''}</td>
+            <td>${order["MODEL"] || ''}</td>
+            <td>${order["PART NAME"] || ''}</td>
+            <td>${order["STATUS"] || ''}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+    const wipCount = data.filter(order => order.STATUS?.toUpperCase() === 'WIP').length;
+    document.getElementById('wipCount').textContent = `Work In Progress (${wipCount})`;
+}
+
+function filterWorkOrders() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = allWorkOrders.filter(order => {
+        return (
+            order["WO NO"]?.toLowerCase().includes(searchTerm) ||
+            order["CUSTOMER"]?.toLowerCase().includes(searchTerm) ||
+            order["DESCRIPTION"]?.toLowerCase().includes(searchTerm) ||
+            order["MODEL"]?.toLowerCase().includes(searchTerm) ||
+            order["PART NAME"]?.toLowerCase().includes(searchTerm)
+        );
+    });
+    renderWorkOrders(filtered);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('searchButton').addEventListener('click', filterWorkOrders);
+    document.getElementById('searchInput').addEventListener('keyup', filterWorkOrders);
+
+    Papa.parse(csvUrl, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            allWorkOrders = results.data;
+            renderWorkOrders(allWorkOrders);
+        },
+        error: function(err) {
+            console.error("Error parsing CSV:", err);
+        }
+    });
+});
+</script>
