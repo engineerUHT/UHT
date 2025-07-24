@@ -167,13 +167,22 @@
             document.getElementById('searchInput').addEventListener('keyup', filterWorkOrders);
 
             Papa.parse(csvUrl, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    allWorkOrders = results.data;
-                    renderWorkOrders(allWorkOrders);
-                },
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+        // Normalize headers: trim and uppercase
+        allWorkOrders = results.data.map(row => {
+            const cleaned = {};
+            for (let key in row) {
+                const newKey = key.trim().toUpperCase();
+                cleaned[newKey] = row[key].trim?.();
+            }
+            return cleaned;
+        });
+        renderWorkOrders(allWorkOrders);
+    },
+
                 error: function(err) {
                     console.error("Error parsing CSV:", err);
                 }
