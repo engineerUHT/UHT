@@ -102,21 +102,12 @@
         <h2 id="wipCount">Work In Progress (0)</h2>
     </div>
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search for item, WO NO, etc…">
+        <input type="text" id="searchInput" placeholder="Search for any field…">
         <button id="searchButton">→</button>
     </div>
     <div class="table-container">
         <table>
-            <thead>
-                <tr>
-                    <th>WO NO</th>
-                    <th>Customer</th>
-                    <th>Component</th>
-                    <th>Model</th>
-                    <th>Part Name</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
+            <thead id="tableHead"></thead>
             <tbody id="workOrderTableBody"></tbody>
         </table>
     </div>
@@ -124,41 +115,45 @@
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzbgpgmqzLT0h1Ud72g8LDDCCQxtS_nCm6Uq5wq_O2HQlb6GXGQrVJhEvNP3KuXel_knuIdjILgEda/pub?output=csv";
 
         let allWorkOrders = [];
+        let headers = [];
+
+        function renderTableHead() {
+            const thead = document.getElementById("tableHead");
+            thead.innerHTML = "";
+            const row = document.createElement("tr");
+            headers.forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                row.appendChild(th);
+            });
+            thead.appendChild(row);
+        }
 
         function renderWorkOrders(data) {
-            const tableBody = document.getElementById('workOrderTableBody');
+            const tableBody = document.getElementById("workOrderTableBody");
             tableBody.innerHTML = '';
             if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No work orders found.</td></tr>';
+                tableBody.innerHTML = `<tr><td colspan="${headers.length}" class="text-center py-4">No work orders found.</td></tr>`;
                 return;
             }
             data.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${row[0]}</td>
-                    <td>${row[1]}</td>
-                    <td>${row[2]}</td>
-                    <td>${row[5]}</td>
-                    <td>${row[13]}</td>
-                    <td>${row[7]}</td>
-                `;
+                const tr = document.createElement("tr");
+                headers.forEach((_, idx) => {
+                    const td = document.createElement("td");
+                    td.textContent = row[idx] || "";
+                    tr.appendChild(td);
+                });
                 tableBody.appendChild(tr);
             });
-            const wipCount = data.filter(row => row[7]?.toUpperCase() === 'WIP').length;
+
+            const statusIndex = headers.findIndex(h => h.trim().toUpperCase() === "STATUS");
+            const wipCount = data.filter(row => row[statusIndex]?.toUpperCase() === 'WIP').length;
             document.getElementById('wipCount').textContent = `Work In Progress (${wipCount})`;
         }
 
         function filterWorkOrders() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allWorkOrders.filter(row => {
-                return (
-                    row[0]?.toLowerCase().includes(searchTerm) ||
-                    row[1]?.toLowerCase().includes(searchTerm) ||
-                    row[2]?.toLowerCase().includes(searchTerm) ||
-                    row[5]?.toLowerCase().includes(searchTerm) ||
-                    row[13]?.toLowerCase().includes(searchTerm)
-                );
-            });
+            const filtered = allWorkOrders.filter(row => row.some(cell => cell?.toLowerCase().includes(searchTerm)));
             renderWorkOrders(filtered);
         }
 
@@ -172,8 +167,9 @@
                 skipEmptyLines: true,
                 complete: function(results) {
                     const rows = results.data;
-                    rows.shift(); // remove header
+                    headers = rows.shift();
                     allWorkOrders = rows;
+                    renderTableHead();
                     renderWorkOrders(allWorkOrders);
                 },
                 error: function(err) {
