@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work In Progress</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 1rem;
+      font-family: Arial, sans-serif;
+      background: #FFC000;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 0.5rem;
+      border-bottom: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background: #f2f2f2;
+    }
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      th {
+        display: none;
+      }
+      td {
+        position: relative;
+        padding-left: 50%;
+      }
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0.5rem;
+        top: 0.5rem;
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Work In Progress</h2>
+  <div id="table-container">Loading...</div>
+
+  <script>
+    async function loadCSV(url) {
+      const response = await fetch(url);
+      const data = await response.text();
+      const rows = data.trim().split('\n').map(row => row.split(','));
+
+      const headers = rows[0];
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
+
+      const headerRow = document.createElement('tr');
+      headers.forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+
+      for (let i = 1; i < rows.length; i++) {
+        const tr = document.createElement('tr');
+        rows[i].forEach((cell, j) => {
+          const td = document.createElement('td');
+          td.textContent = cell;
+          td.setAttribute('data-label', headers[j]);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      }
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      document.getElementById('table-container').innerHTML = '';
+      document.getElementById('table-container').appendChild(table);
+    }
+
+    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQzbgpgmqzLT0h1Ud72g8LDDCCQxtS_nCm6Uq5wq_O2HQlb6GXGQrVJhEvNP3KuXel_knuIdjILgEda/pub?output=csv");
+  </script>
+</body>
+</html>
