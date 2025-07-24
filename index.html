@@ -1,61 +1,220 @@
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<script>
-const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzbgpgmqzLT0h1Ud72g8LDDCCQxtS_nCm6Uq5wq_O2HQlb6GXGQrVJhEvNP3KuXel_knuIdjILgEda/pub?output=csv";
-
-let allWorkOrders = [];
-
-function renderWorkOrders(data) {
-    const tableBody = document.getElementById('workOrderTableBody');
-    tableBody.innerHTML = '';
-    if (data.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No work orders found.</td></tr>';
-        return;
-    }
-    data.forEach(order => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${order["WO NO"] || ''}</td>
-            <td>${order["CUSTOMER"] || ''}</td>
-            <td>${order["DESCRIPTION"] || ''}</td>
-            <td>${order["MODEL"] || ''}</td>
-            <td>${order["PART NAME"] || ''}</td>
-            <td>${order["STATUS"] || ''}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-    const wipCount = data.filter(order => order.STATUS?.toUpperCase() === 'WIP').length;
-    document.getElementById('wipCount').textContent = `Work In Progress (${wipCount})`;
-}
-
-function filterWorkOrders() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allWorkOrders.filter(order => {
-        return (
-            order["WO NO"]?.toLowerCase().includes(searchTerm) ||
-            order["CUSTOMER"]?.toLowerCase().includes(searchTerm) ||
-            order["DESCRIPTION"]?.toLowerCase().includes(searchTerm) ||
-            order["MODEL"]?.toLowerCase().includes(searchTerm) ||
-            order["PART NAME"]?.toLowerCase().includes(searchTerm)
-        );
-    });
-    renderWorkOrders(filtered);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('searchButton').addEventListener('click', filterWorkOrders);
-    document.getElementById('searchInput').addEventListener('keyup', filterWorkOrders);
-
-    Papa.parse(csvUrl, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            allWorkOrders = results.data;
-            renderWorkOrders(allWorkOrders);
-        },
-        error: function(err) {
-            console.error("Error parsing CSV:", err);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Oswald", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #FFC000;
+            padding: 1rem;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-    });
-});
-</script>
+        .header {
+            background: #fff;
+            padding: 1rem;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+        }
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .product-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem;
+            min-width: 150px;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            outline: none;
+        }
+        .search-bar button {
+            background: black;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .search-bar button:hover {
+            background-color: #333;
+        }
+        .table-container {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            flex-grow: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Welcome, Oka Hanuraga</div>
+    <div class="product-header">
+        <h2 id="wipCount">Work In Progress (0)</h2>
+    </div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search for item, WO NO, etc…">
+        <button id="searchButton">→</button>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>WO NO</th>
+                    <th>Customer</th>
+                    <th>Component</th>
+                    <th>Model</th>
+                    <th>Part Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="workOrderTableBody"></tbody>
+        </table>
+    </div>
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzbgpgmqzLT0h1Ud72g8LDDCCQxtS_nCm6Uq5wq_O2HQlb6GXGQrVJhEvNP3KuXel_knuIdjILgEda/pub?output=csv";
+
+        async function fetchCSVData(url) {
+            const res = await fetch(url);
+            const text = await res.text();
+
+            const rows = [];
+            let currentRow = [];
+            let currentCell = '';
+            let insideQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"') {
+                    if (insideQuotes && nextChar === '"') {
+                        currentCell += '"';
+                        i++;
+                    } else {
+                        insideQuotes = !insideQuotes;
+                    }
+                } else if (char === ',' && !insideQuotes) {
+                    currentRow.push(currentCell);
+                    currentCell = '';
+                } else if ((char === '\n' || char === '\r') && !insideQuotes) {
+                    if (currentCell !== '' || currentRow.length > 0) {
+                        currentRow.push(currentCell);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentCell = '';
+                    }
+                } else {
+                    currentCell += char;
+                }
+            }
+            if (currentCell !== '' || currentRow.length > 0) {
+                currentRow.push(currentCell);
+                rows.push(currentRow);
+            }
+
+            const headers = rows[0];
+            const data = rows.slice(1).map(row => {
+                const entry = {};
+                headers.forEach((h, i) => {
+                    entry[h.trim()] = (row[i] || '').trim();
+                });
+                return entry;
+            });
+            return data;
+        }
+
+        let allWorkOrders = [];
+
+        function renderWorkOrders(data) {
+            const tableBody = document.getElementById('workOrderTableBody');
+            tableBody.innerHTML = '';
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No work orders found.</td></tr>';
+                return;
+            }
+            data.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order["WO NO"] || ''}</td>
+                    <td>${order["CUSTOMER"] || ''}</td>
+                    <td>${order["DESCRIPTION"] || ''}</td>
+                    <td>${order["MODEL"] || ''}</td>
+                    <td>${order["PART NAME"] || ''}</td>
+                    <td>${order["STATUS"] || ''}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            const wipCount = data.filter(order => order.STATUS === 'WIP').length;
+            document.getElementById('wipCount').textContent = `Work In Progress (${wipCount})`;
+        }
+
+        function filterWorkOrders() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allWorkOrders.filter(order => {
+                return (order["WO NO"] && order["WO NO"].toLowerCase().includes(searchTerm)) ||
+                    (order["CUSTOMER"] && order["CUSTOMER"].toLowerCase().includes(searchTerm)) ||
+                    (order["DESCRIPTION"] && order["DESCRIPTION"].toLowerCase().includes(searchTerm)) ||
+                    (order["MODEL"] && order["MODEL"].toLowerCase().includes(searchTerm)) ||
+                    (order["PART NAME"] && order["PART NAME"].toLowerCase().includes(searchTerm));
+            });
+            renderWorkOrders(filtered);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('searchButton').addEventListener('click', filterWorkOrders);
+            document.getElementById('searchInput').addEventListener('keyup', filterWorkOrders);
+            allWorkOrders = await fetchCSVData(csvUrl);
+            renderWorkOrders(allWorkOrders);
+        });
+    </script>
+</body>
+</html>
