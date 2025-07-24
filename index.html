@@ -171,7 +171,6 @@
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    // Normalize headers: trim and uppercase
                     allWorkOrders = results.data.map(row => {
                         const cleaned = {};
                         for (let key in row) {
@@ -180,6 +179,7 @@
                         }
                         return cleaned;
                     });
+                    console.log("Loaded Work Orders:", allWorkOrders);
                     renderWorkOrders(allWorkOrders);
                 },
                 error: function(err) {
