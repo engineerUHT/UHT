@@ -1,226 +1,208 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        background: #FFC000;
-        height: 100%;
-        width: 100%;
-        overflow-x: hidden;
-      }
-      iframe {
-        border: none;
-        width: 100vw;
-        height: 100vh;
-      }
-    </style>
-  </head>
-  <body>
-    <iframe src="https://engineerUHT.github.io/UHT/" allowfullscreen></iframe>
-  </body>
-</html>
-yang ini
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Products</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #FFC000;
-      box-sizing: border-box;
-    }
-    *, *::before, *::after {
-      box-sizing: inherit;
-    }
-    .header {
-      padding: 1rem;
-      background: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      width: 100%;
-    }
-    .container {
-      padding: 1rem;
-      width: 100%;
-    }
-    .product-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-    .product-header h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-    .product-header button {
-      margin-top: 0.5rem;
-      background: #FFD400;
-      padding: 0.5rem 1rem;
-      border: none;
-      font-weight: bold;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .search-bar {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-    .search-bar input {
-      flex: 1;
-      padding: 0.5rem;
-      font-size: 14px;
-      min-width: 150px;
-    }
-    .search-bar button {
-      background: black;
-      color: white;
-      padding: 0.5rem 1rem;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      font-size: 0.8rem;
-    }
-    th, td {
-      padding: 0.5rem;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background: #f2f2f2;
-      font-weight: bold;
-    }
-    @media screen and (max-width: 600px) {
-      .product-header, .search-bar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      table thead {
-        display: none;
-      }
-      table, tbody, tr, td {
-        display: block;
-        width: 100%;
-      }
-      tr {
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background: #fff;
-        padding: 0.5rem;
-      }
-      td {
-        text-align: right;
-        padding-left: 50%;
-        position: relative;
-      }
-      td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 0.75rem;
-        width: 45%;
-        white-space: nowrap;
-        text-align: left;
-        font-weight: bold;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Oswald", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #FFC000;
+            padding: 1rem;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: #fff;
+            padding: 1rem;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+        }
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .product-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .product-header button {
+            margin-top: 0.5rem;
+            background: #FFD400;
+            padding: 0.5rem 1rem;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .product-header button:hover {
+            background-color: #E6B800;
+        }
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem;
+            min-width: 150px;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            outline: none;
+        }
+        .search-bar button {
+            background: black;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .search-bar button:hover {
+            background-color: #333;
+        }
+        .table-container {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            flex-grow: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
-  <div class="header">Welcome, Oka Hanuraga</div>
-
-  <div class="container">
+    <div class="header">Welcome, Oka Hanuraga</div>
     <div class="product-header">
-      <h2>Work In Progress (7)</h2>
-      <button>REGISTER PRODUCT</button>
+        <h2 id="wipCount">Work In Progress (0)</h2>
+        <button id="registerProductButton">REGISTER PRODUCT</button>
     </div>
-
     <div class="search-bar">
-      <input type="text" placeholder="Search for item, serial or door nr…">
-      <button>→</button>
+        <input type="text" id="searchInput" placeholder="Search for item, serial or WO NO…">
+        <button id="searchButton">→</button>
     </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>WO NO</th>
+                    <th>Customer</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Arrival</th>
+                    <th>Inspection</th>
+                    <th>Release</th>
+                    <th>Part Name</th>
+                    <th>Job Type</th>
+                    <th>TAT</th>
+                </tr>
+            </thead>
+            <tbody id="workOrderTableBody"></tbody>
+        </table>
+    </div>
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzbgpgmqzLT0h1Ud72g8LDDCCQxtS_nCm6Uq5wq_O2HQlb6GXGQrVJhEvNP3KuXel_knuIdjILgEda/pub?output=csv";
 
-    <table>
-      <thead>
-        <tr>
-          <th>WO No</th>
-          <th>Component</th>
-          <th>Model</th>
-          <th>Part Name</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td data-label="WO No">WO-20250701-001</td>
-          <td data-label="Component">Tube Blade Lift Cylinder</td>
-          <td data-label="Model">777D</td>
-          <td data-label="Part Name">PISTON</td>
-          <td data-label="Status">WIP</td>
-        </tr>
-        <tr>
-          <td data-label="WO No">WO-20250701-002</td>
-          <td data-label="Component">Tube Blade Lift Cylinder</td>
-          <td data-label="Model">777D</td>
-          <td data-label="Part Name">BARREL</td>
-          <td data-label="Status">Finished</td>
-        </tr>
-        <tr>
-          <td data-label="WO No">WO-20250701-003</td>
-          <td data-label="Component">Tube Blade Lift Cylinder</td>
-          <td data-label="Model">777D</td>
-          <td data-label="Part Name">ROD</td>
-          <td data-label="Status">Cancel</td>
-        </tr>
-        <tr>
-          <td data-label="WO No">WO-20250701-004</td>
-          <td data-label="Component">Lift Arm Assembly</td>
-          <td data-label="Model">980H</td>
-          <td data-label="Part Name">SEAL KIT</td>
-          <td data-label="Status">WIP</td>
-        </tr>
-        <tr>
-          <td data-label="WO No">WO-20250701-005</td>
-          <td data-label="Component">Track Adjuster</td>
-          <td data-label="Model">D6R</td>
-          <td data-label="Part Name">SPRING</td>
-          <td data-label="Status">Finished</td>
-        </tr>
-        <tr>
-          <td data-label="WO No">WO-20250701-006</td>
-          <td data-label="Component">Hydraulic Tank</td>
-          <td data-label="Model">PC200</td>
-          <td data-label="Part Name">FLANGE</td>
-          <td data-label="Status">Cancel</td>
-        </tr>
-        <tr>
-          <td data-label="WO No">WO-20250701-007</td>
-          <td data-label="Component">Radiator Core</td>
-          <td data-label="Model">HD465</td>
-          <td data-label="Part Name">CORE PANEL</td>
-          <td data-label="Status">WIP</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        async function fetchCSVData(url) {
+            const res = await fetch(url);
+            const text = await res.text();
+            const rows = text.trim().split("\n").map(row => row.split(","));
+            const headers = rows[0];
+            const data = rows.slice(1).map(row => {
+                const entry = {};
+                row.forEach((val, idx) => {
+                    entry[headers[idx]] = val;
+                });
+                return entry;
+            });
+            return data;
+        }
 
-  <!-- Spacer div to avoid white space issue in iframe -->
-  <div style="min-height: 20px;"></div>
+        let allWorkOrders = [];
+
+        function renderWorkOrders(data) {
+            const tableBody = document.getElementById('workOrderTableBody');
+            tableBody.innerHTML = '';
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="10" class="text-center py-4">No work orders found.</td></tr>';
+                return;
+            }
+            data.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order["WO NO"] || ''}</td>
+                    <td>${order["CUSTOMER"] || ''}</td>
+                    <td>${order["DESCRIPTION"] || ''}</td>
+                    <td>${order["STATUS"] || ''}</td>
+                    <td>${order["ARIVAL"] || ''}</td>
+                    <td>${order["INSPECTION"] || ''}</td>
+                    <td>${order["RELEASE"] || ''}</td>
+                    <td>${order["PART NAME"] || ''}</td>
+                    <td>${order["JOB TYPE"] || ''}</td>
+                    <td>${order["TAT"] || ''}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            const wipCount = data.filter(order => order.STATUS === 'WIP').length;
+            document.getElementById('wipCount').textContent = `Work In Progress (${wipCount})`;
+        }
+
+        function filterWorkOrders() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allWorkOrders.filter(order => {
+                return (order["WO NO"] && order["WO NO"].toLowerCase().includes(searchTerm)) ||
+                    (order["CUSTOMER"] && order["CUSTOMER"].toLowerCase().includes(searchTerm)) ||
+                    (order["DESCRIPTION"] && order["DESCRIPTION"].toLowerCase().includes(searchTerm)) ||
+                    (order["MODEL"] && order["MODEL"].toLowerCase().includes(searchTerm)) ||
+                    (order["PART NAME"] && order["PART NAME"].toLowerCase().includes(searchTerm));
+            });
+            renderWorkOrders(filtered);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('searchButton').addEventListener('click', filterWorkOrders);
+            document.getElementById('searchInput').addEventListener('keyup', filterWorkOrders);
+            allWorkOrders = await fetchCSVData(csvUrl);
+            renderWorkOrders(allWorkOrders);
+        });
+    </script>
 </body>
 </html>
