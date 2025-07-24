@@ -101,7 +101,7 @@
         <h2 id="wipCount">Work In Progress (0)</h2>
     </div>
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search for item, serial or WO NO…">
+        <input type="text" id="searchInput" placeholder="Search for item, WO NO, etc…">
         <button id="searchButton">→</button>
     </div>
     <div class="table-container">
@@ -110,14 +110,10 @@
                 <tr>
                     <th>WO NO</th>
                     <th>Customer</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Arrival</th>
-                    <th>Inspection</th>
-                    <th>Release</th>
+                    <th>Component</th>
+                    <th>Model</th>
                     <th>Part Name</th>
-                    <th>Job Type</th>
-                    <th>TAT</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody id="workOrderTableBody"></tbody>
@@ -182,7 +178,7 @@
             const tableBody = document.getElementById('workOrderTableBody');
             tableBody.innerHTML = '';
             if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="10" class="text-center py-4">No work orders found.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No work orders found.</td></tr>';
                 return;
             }
             data.forEach(order => {
@@ -191,13 +187,9 @@
                     <td>${order["WO NO"] || ''}</td>
                     <td>${order["CUSTOMER"] || ''}</td>
                     <td>${order["DESCRIPTION"] || ''}</td>
-                    <td>${order["STATUS"] || ''}</td>
-                    <td>${order["ARIVAL"] || ''}</td>
-                    <td>${order["INSPECTION"] || ''}</td>
-                    <td>${order["RELEASE"] || ''}</td>
+                    <td>${order["MODEL"] || ''}</td>
                     <td>${order["PART NAME"] || ''}</td>
-                    <td>${order["JOB TYPE"] || ''}</td>
-                    <td>${order["TAT"] || ''}</td>
+                    <td>${order["STATUS"] || ''}</td>
                 `;
                 tableBody.appendChild(row);
             });
